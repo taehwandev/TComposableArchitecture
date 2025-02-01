@@ -12,7 +12,7 @@ This code primarily consists of:
 - action-system : This manages actions sent from Compose, received and processed by the ViewModel (using a reducer pattern). It also facilitates sending new actions when needed.
 - sample app : The sample app demonstrates how to use the architecture.
 
-# CaViewModel과 CaActivity
+# CaViewModel and CaActivity
 
 While usage location within your `@Composables` doesn't matter, two base classes are provided for convenience:
 
