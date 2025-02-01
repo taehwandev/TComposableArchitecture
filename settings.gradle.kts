@@ -30,5 +30,5 @@ include(":app")
 
 // core
 include(
-    ":core:ui:action-system",
+    ":core:ui:composable-architecture-system",
 )
