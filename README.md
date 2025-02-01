@@ -2,7 +2,6 @@
 
 T-ComposableArchitecture is a sample project that explores a structure similar to Reducers, UiState, and SideEffects from React.
 
-이 아키텍처는 TCA[swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture)를 참고하여 제작해보았습니다.
 This architecture is inspired by the [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) (TCA).
 
 It's intended for educational and sample usage, built using Compose and Hilt.
