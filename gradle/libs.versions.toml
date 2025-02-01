@@ -190,6 +190,7 @@ tech-thdev-android-library = { id = "tech.thdev.android.library", version = "uns
 tech-thdev-android-library-compose = { id = "tech.thdev.android.library.compose", version = "unspecified" }
 tech-thdev-android-library-hilt = { id = "tech.thdev.android.library.hilt", version = "unspecified" }
 tech-thdev-android-library-navigation = { id = "tech.thdev.android.library.navigation", version = "unspecified" }
+tech-thdev-android-library-publish = { id = "tech.thdev.android.library.publish", version = "unspecified" }
 
 tech-thdev-kotlin-library = { id = "tech.thdev.kotlin.library", version = "unspecified" }
 tech-thdev-kotlin-library-hilt = { id = "tech.thdev.kotlin.library.hilt", version = "unspecified" }
