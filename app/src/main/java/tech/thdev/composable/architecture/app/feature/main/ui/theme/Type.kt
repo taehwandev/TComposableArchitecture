@@ -1,4 +1,4 @@
-package tech.thdev.composable.architecture.ui.theme
+package tech.thdev.composable.architecture.app.feature.main.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
@@ -29,6 +29,5 @@ val Typography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp
-    )
-    */
+    ) */
 )

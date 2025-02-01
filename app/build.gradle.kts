@@ -3,7 +3,7 @@ plugins {
     alias(libs.plugins.tech.thdev.android.library.hilt)
 }
 
-setNamespace("composable.architecture")
+setNamespace("app")
 
 android {
     val (majorVersion, minorVersion, patchVersion, code) = getVersionInfo()
@@ -30,5 +30,9 @@ dependencies {
 
     implementation(libs.androidx.core)
 
-    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.activity)
+
+    projects.core.filterImplementation {
+        implementation(it)
+    }
 }

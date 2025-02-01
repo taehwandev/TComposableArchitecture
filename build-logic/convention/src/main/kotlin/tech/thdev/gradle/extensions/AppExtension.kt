@@ -6,7 +6,7 @@ import tech.thdev.gradle.extensions.androidExtension
 
 fun Project.setNamespace(name: String) {
     androidExtension.apply {
-        namespace = "tech.thdev.$name"
+        namespace = "tech.thdev.composable.architecture.$name"
     }
 }
 

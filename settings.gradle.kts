@@ -25,4 +25,10 @@ dependencyResolutionManagement {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "TComposableArchitecture"
+
 include(":app")
+
+// core
+include(
+    ":core:ui:action-system",
+)

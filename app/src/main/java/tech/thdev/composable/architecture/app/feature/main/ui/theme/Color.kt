@@ -1,4 +1,4 @@
-package tech.thdev.composable.architecture.ui.theme
+package tech.thdev.composable.architecture.app.feature.main.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
