@@ -79,7 +79,21 @@ class MainActivity : CaActionActivity() {
     @Composable
     override fun ContentView() {
         TComposableArchitectureTheme {
-            // Your Composable view
+            val action = LocalActionOwner.current
+
+            Column {
+              Button(
+                onClick = action.send(Action.SomeAction),
+              ) {
+                Text(
+                  text = "OnClick",
+                )
+              }
+            
+              Text(
+                text = uiState.text,
+              )
+            }
 
             LaunchedEffect(Unit) { // Required: Load actions
                 mainViewModel.loadAction()
@@ -95,6 +109,46 @@ class MainActivity : CaActionActivity() {
             }
         }
     }
+}
+```
+
+Or composable function
+
+```kotlin
+@Composable
+fun SomeScreen(
+  mainViewModel: MainViewModel = viewModels(),
+) {
+  val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+
+  SomeScreen(
+    uiState = uiState,
+  )
+
+  LaunchEffect(Unit) {
+    mainViewModel.loadAction() // Required: Load actions
+  }
+}
+
+@Composable
+fun SomeScreen(
+  uiState: UiState,
+) {
+  val action = LocalActionOwner.current
+
+  Column {
+    Button(
+      onClick = action.send(Action.SomeAction),
+    ) {
+      Text(
+        text = "OnClick",
+      )
+    }
+
+    Text(
+      text = uiState.text,
+    )
+  }
 }
 ```
 
