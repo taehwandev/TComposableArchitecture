@@ -11,6 +11,10 @@ This code primarily consists of:
 - action-system : This manages actions sent from Compose, received and processed by the ViewModel (using a reducer pattern). It also facilitates sending new actions when needed.
 - sample app : The sample app demonstrates how to use the architecture.
 
+# Blog
+- [T Composable Architecture for Compose (React-inspired) - en](https://medium.com/@taehwandev/t-composable-architecture-for-compose-react-inspired-6ef28d799100)
+- [컴포즈에 사용할 Composable Architecutre 설명(리엑트?) - ko](https://thdev.tech/architecture/2025/02/02/Android-Architecture-01/)
+
 # Download
 
 Use gradle - compose 1.7.6, compose compiler k2, kotlin 2.0.21
