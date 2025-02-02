@@ -23,6 +23,8 @@ Release version are available in [Sonatyp's repository.](https://search.maven.or
 
 # CaViewModel and CaActivity
 
+[Sample code](https://github.com/taehwandev/TComposableArchitecture/blob/main/app/src/main/java/tech/thdev/composable/architecture/app/feature/main/MainActivity.kt)
+
 While usage location within your `@Composables` doesn't matter, two base classes are provided for convenience:
 
 - CaViewModel : This class handles events received from the action-system, implementing a reducer and enabling SideEffect usage for one-time events.
@@ -32,7 +34,10 @@ Implement your Actions:
 
 ```kotlin
 sealed interface Action : CaAction {
-    data object SomeAction : Action // Use object for simple actions
+
+    data object Task : Action // Use object for simple actions
+    
+    data object LoadData : Action // Use object for simple actions
 }
 ```
 
@@ -40,7 +45,8 @@ Implement your SideEffects:
 
 ```kotlin
 sealed interface SideEffect : CaSideEffect {
-    data object OneTime : SideEffect // Use object for simple side effects
+
+    data object ShowToast : SideEffect // Use object for simple side effects
 }
 ```
 
@@ -53,10 +59,22 @@ class MainViewModel @Inject constructor(
     flowCaActionStream: FlowCaActionStream,
 ) : CaViewModel<Action, SideEffect>(flowCaActionStream, Action::class) {
 
+    private val _uiState = MutableStateFlow(UiState())
+    val state = _uiState.asStateFlow()
+
     override suspend fun reducer(action: Action): CaAction =
         when (action) {
+            is Action.Task -> {
+                _uiState.value = UiState(showPlaceholder = true)
+                Action.LoadData // next event
+            }
+
             is Action.Send -> {
+                val loadEnd = // load network
+                _uiState.value = UiState(text = loadEnd)
+
                 sendSideEffect(SideEffect.ShowToast)
+
                 CaActionNone // Or return another action
             }
             // ... other actions
@@ -83,7 +101,7 @@ class MainActivity : CaActionActivity() {
 
             Column {
               Button(
-                onClick = action.send(Action.SomeAction),
+                onClick = action.send(Action.LoadData),
               ) {
                 Text(
                   text = "OnClick",
@@ -95,8 +113,9 @@ class MainActivity : CaActionActivity() {
               )
             }
 
-            LaunchedEffect(Unit) { // Required: Load actions
-                mainViewModel.loadAction()
+            LaunchedEffect(Unit) {
+                mainViewModel.loadAction() // Required: Load actions
+                mainViewModel.action(Action.Task) // Option task
             }
 
             mainViewModel.sideEffect.collectAsEvent { // Optional: Handle side effects
@@ -117,38 +136,39 @@ Or composable function
 ```kotlin
 @Composable
 fun SomeScreen(
-  mainViewModel: MainViewModel = viewModels(),
+    mainViewModel: MainViewModel = viewModels(),
 ) {
-  val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
 
-  SomeScreen(
-    uiState = uiState,
-  )
+    SomeScreen(
+        uiState = uiState,
+    )
 
-  LaunchEffect(Unit) {
-    mainViewModel.loadAction() // Required: Load actions
-  }
+    LaunchEffect(Unit) {
+        mainViewModel.loadAction() // Required: Load actions
+        mainViewModel.action(Action.Task) // Option task
+    }
 }
 
 @Composable
 fun SomeScreen(
-  uiState: UiState,
+    uiState: UiState,
 ) {
-  val action = LocalActionOwner.current
+    val action = LocalActionOwner.current
 
-  Column {
-    Button(
-      onClick = action.send(Action.SomeAction),
-    ) {
-      Text(
-        text = "OnClick",
-      )
+    Column {
+        Button(
+            onClick = action.send(Action.LoadData),
+        ) {
+            Text(
+                text = "OnClick",
+            )
+        }
+    
+        Text(
+            text = uiState.text,
+        )
     }
-
-    Text(
-      text = uiState.text,
-    )
-  }
 }
 ```
 
