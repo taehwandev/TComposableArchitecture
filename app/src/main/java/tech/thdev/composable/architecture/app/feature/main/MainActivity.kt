@@ -5,13 +5,17 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import tech.thdev.composable.architecture.alert.system.CaAlertScreen
 import tech.thdev.composable.architecture.app.feature.main.compose.MainScreen
 import tech.thdev.composable.architecture.app.feature.main.ui.theme.TComposableArchitectureTheme
 import tech.thdev.composable.architecture.base.CaActionActivity
@@ -25,6 +29,12 @@ class MainActivity : CaActionActivity() {
     @Composable
     override fun ContentView() {
         TComposableArchitectureTheme {
+            val snackbarHostState = remember { SnackbarHostState() }
+
+            CaAlertScreen(
+                snackbarHostState = snackbarHostState,
+            )
+
             Scaffold(
                 topBar = {
                     TopAppBar(
@@ -32,6 +42,9 @@ class MainActivity : CaActionActivity() {
                             Text("Composable Architecture example")
                         }
                     )
+                },
+                snackbarHost = {
+                    SnackbarHost(hostState = snackbarHostState)
                 },
                 modifier = Modifier
                     .fillMaxSize()

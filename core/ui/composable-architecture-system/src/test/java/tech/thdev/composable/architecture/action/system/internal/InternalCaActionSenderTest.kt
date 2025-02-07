@@ -9,7 +9,6 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.action.system.CaActionNone
 
 @Config(sdk = [Build.VERSION_CODES.VANILLA_ICE_CREAM])
 @RunWith(RobolectricTestRunner::class)
@@ -24,7 +23,7 @@ class InternalCaActionSenderTest {
                 expectNoEvents()
 
                 // If the action is none, do not process it.
-                flowAction.send(CaActionNone)
+                flowAction.send(CaAction.None)
                 expectNoEvents()
 
                 flowAction.send(SomeAction)

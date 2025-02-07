@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.filter
 import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.action.system.CaActionNone
 import tech.thdev.composable.architecture.action.system.CaActionSender
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class InternalCaAction @Inject constructor() : FlowCaActionStream, CaActionSende
 
     override fun flowAction(): Flow<CaAction> =
         flowCaAction.asSharedFlow()
-            .filter { it != CaActionNone }
+            .filter { it != CaAction.None }
 
     override fun send(action: CaAction) {
         flowCaAction.tryEmit(action)
