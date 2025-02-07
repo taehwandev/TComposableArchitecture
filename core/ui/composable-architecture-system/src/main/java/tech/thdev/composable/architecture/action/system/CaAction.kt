@@ -12,6 +12,7 @@ package tech.thdev.composable.architecture.action.system
  * }
  * ```
  */
-interface CaAction
+interface CaAction {
 
-data object CaActionNone : CaAction
+    data object None : CaAction
+}
