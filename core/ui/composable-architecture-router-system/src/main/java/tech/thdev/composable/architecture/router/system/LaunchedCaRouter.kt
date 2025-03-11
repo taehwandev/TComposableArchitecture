@@ -11,19 +11,23 @@ import tech.thdev.composable.architecture.router.system.internal.InternalCaRoute
 import tech.thdev.composable.architecture.router.system.internal.InternalCaSideEffect
 
 @Composable
-fun CaLaunchRouter(
+fun LaunchedCaRouter(
     navHostController: NavHostController? = null,
 ) {
-    InternalCaLaunchRouter(
+    InternalLaunchedCaRouter(
         navHostController = navHostController,
     )
 }
 
 @Composable
-private fun InternalCaLaunchRouter(
+private fun InternalLaunchedCaRouter(
     navHostController: NavHostController? = null,
     internalRouterViewModel: InternalCaRouterViewModel = hiltViewModel(),
 ) {
+    LaunchedLifecycleViewModel(
+        viewModel = internalRouterViewModel,
+    )
+
     val activity = LocalActivity.current
 
     internalRouterViewModel.sideEffect.collectLifecycleEvent { sideEffect ->
@@ -60,8 +64,4 @@ private fun InternalCaLaunchRouter(
             }
         }
     }
-
-    LaunchedLifecycleViewModel(
-        viewModel = internalRouterViewModel,
-    )
 }

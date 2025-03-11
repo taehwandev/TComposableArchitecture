@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import tech.thdev.composable.architecture.action.system.CaActionSender
-import tech.thdev.composable.architecture.action.system.compose.LocalCaActionSenderOwner
+import tech.thdev.composable.architecture.action.system.compose.LocalCaActionOwner
 import javax.inject.Inject
 
 /**
@@ -40,7 +40,7 @@ abstract class CaActionActivity : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(
-                LocalCaActionSenderOwner provides caActionSender,
+                LocalCaActionOwner provides caActionSender,
             ) {
                 ContentView()
             }
