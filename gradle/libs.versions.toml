@@ -187,6 +187,8 @@ android-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "an
 tech-thdev-android-application = { id = "tech.thdev.android.application", version = "unspecified" }
 
 tech-thdev-android-library = { id = "tech.thdev.android.library", version = "unspecified" }
+tech-thdev-android-library-feature = { id = "tech.thdev.android.library.feature", version = "unspecified" }
+tech-thdev-android-library-feature-api = { id = "tech.thdev.android.library.feature.api", version = "unspecified" }
 tech-thdev-android-library-compose = { id = "tech.thdev.android.library.compose", version = "unspecified" }
 tech-thdev-android-library-hilt = { id = "tech.thdev.android.library.hilt", version = "unspecified" }
 tech-thdev-android-library-navigation = { id = "tech.thdev.android.library.navigation", version = "unspecified" }
