@@ -40,6 +40,8 @@ include(
 )
 
 include(
+    ":sample:feature:detail:detail",
+    ":sample:feature:detail:detail-api",
     ":sample:feature:main:main",
     ":sample:feature:main:main-api",
 )

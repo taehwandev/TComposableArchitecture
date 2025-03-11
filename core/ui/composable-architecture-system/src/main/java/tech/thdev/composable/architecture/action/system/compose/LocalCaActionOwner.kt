@@ -51,7 +51,7 @@ import tech.thdev.composable.architecture.action.system.CaActionSender
  * }
  * ```
  */
-object LocalCaActionSenderOwner {
+object LocalCaActionOwner {
 
     private val LocalComposition = staticCompositionLocalOf<CaActionSender?> { null }
 

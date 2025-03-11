@@ -1,5 +1,6 @@
 package tech.thdev.composable.architecture.router.system.internal
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
@@ -8,6 +9,7 @@ import tech.thdev.composable.architecture.router.system.CaJourneyMapper
 import tech.thdev.composable.architecture.router.system.CaRouterAction
 import javax.inject.Inject
 
+@HiltViewModel
 class InternalCaRouterViewModel @Inject internal constructor(
     flowCaActionStream: FlowCaActionStream,
     private val journeyMapper: CaJourneyMapper,

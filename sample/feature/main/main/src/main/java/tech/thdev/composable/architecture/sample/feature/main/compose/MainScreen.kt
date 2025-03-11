@@ -7,7 +7,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import tech.thdev.composable.architecture.action.system.compose.LocalCaActionSenderOwner
+import tech.thdev.composable.architecture.action.system.compose.LocalCaActionOwner
 import tech.thdev.composable.architecture.action.system.send
 import tech.thdev.composable.architecture.sample.feature.main.Action
 import tech.thdev.composable.architecture.sample.resource.R
@@ -16,7 +16,7 @@ import tech.thdev.composable.architecture.sample.resource.R
 internal fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
-    val actionSender = LocalCaActionSenderOwner.current
+    val actionSender = LocalCaActionOwner.current
 
     Column(
         modifier = modifier
@@ -43,6 +43,14 @@ internal fun MainScreen(
         ) {
             Text(
                 text = "ShowAlert",
+            )
+        }
+
+        Button(
+            onClick = actionSender.send(Action.ShowDetail(message = "Show detail activity")),
+        ) {
+            Text(
+                text = "Show Detail activity",
             )
         }
     }
