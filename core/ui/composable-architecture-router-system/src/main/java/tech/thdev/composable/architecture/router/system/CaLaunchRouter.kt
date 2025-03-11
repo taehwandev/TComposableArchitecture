@@ -10,7 +10,6 @@ import tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent
 import tech.thdev.composable.architecture.router.system.internal.InternalCaRouterViewModel
 import tech.thdev.composable.architecture.router.system.internal.InternalCaSideEffect
 
-
 @Composable
 fun CaLaunchRouter(
     navHostController: NavHostController? = null,
