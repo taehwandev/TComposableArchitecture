@@ -1,8 +1,6 @@
 package tech.thdev.composable.architecture.app.feature.main
 
-import tech.thdev.composable.architecture.action.system.CaSideEffect
-
-sealed interface SideEffect : CaSideEffect {
+sealed interface SideEffect {
 
     data object ShowToast : SideEffect
 }

@@ -4,15 +4,11 @@ import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.action.system.CaSideEffect
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import kotlin.reflect.KClass
 
@@ -21,16 +17,19 @@ import kotlin.reflect.KClass
  * It uses a similar structure to a reducer, allowing you to utilize it as shown below.  It also supports SideEffect handling.
  *
  * ```kotlin
- * @HiltViewModel
- * class MainViewModel @Inject constructor(
+ * class MainViewModel constructor(
  *     flowCaActionStream: FlowCaActionStream,
- * ) : CaViewModel<Action, SideEffect>(flowCaActionStream, Action::class) {
+ * ) : CaViewModel<Action>(flowCaActionStream, Action::class) {
  *
- *     override suspend fun reducer(action: Action): CaAction =
+ *      private val _sideEffect = Channel<SideEffect>(Channel.BUFFERED)
+ *      internal val sideEffect = _sideEffect.receiveAsFlow()
+ *
+ *     override suspend fun reducer(action: YourAction) =
  *         when (action) {
- *             is Action.Send -> {
- *                 sendSideEffect(SideEffect.ShowToast)
- *                 CaActionNone
+ *             is YourAction.ShowToast -> {
+ *                 _sideEffect.send(SideEffect.ShowToast)
+ *                 // or
+ *                 flowCaActionStream.nextAction(NextAction.ShowToast)
  *             }
  *         }
  * }
@@ -40,7 +39,7 @@ import kotlin.reflect.KClass
  * - Required: Call `viewModel.loadAction()`
  * - Optional: Collect `viewModel.sideEffect` using `viewModel.sideEffect.collectAsEvent { ... }`
  *
- * [tech.thdev.composable.architecture.util.collectAsEvent] is a pre-defined function that collects side effects with a default lifecycle state of [Lifecycle.State.STARTED].
+ * [tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent] is a pre-defined function that collects side effects with a default lifecycle state of [Lifecycle.State.STARTED].
  *
  * ```kotlin
  * @AndroidEntryPoint
@@ -51,55 +50,58 @@ import kotlin.reflect.KClass
  *     @Composable
  *     override fun ContentView() {
  *         TComposableArchitectureTheme {
- *             // Your Composable view
+ *             LaunchedLifecycleViewModel(viewModel = mainViewModel) // Required
  *
- *             LaunchedEffect(Unit) { // Required: Load actions
- *                 mainViewModel.loadAction()
- *             }
- *
- *             mainViewModel.sideEffect.collectAsEvent { // Optional: Handle side effects
- *                 when (it) {
- *                     SideEffect.ShowToast -> {
- *                         Toast.makeText(this@MainActivity, "message", Toast.LENGTH_SHORT).show()
- *                     }
- *                 }
- *             }
+ *             // Your Compose view
  *         }
  *     }
  * }
  * ```
  */
-abstract class CaViewModel<ACTION : CaAction, SIDE_EFFECT : CaSideEffect>(
-    flowCaActionStream: FlowCaActionStream,
-    actionClass: KClass<ACTION>,
+abstract class CaViewModel<CA_ACTION : CaAction>(
+    private val flowCaActionStream: FlowCaActionStream,
+    actionClass: KClass<CA_ACTION>,
 ) : ViewModel() {
 
-    private val _sideEffect = MutableSharedFlow<SIDE_EFFECT>(
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST,
-    )
-    val sideEffect = _sideEffect.asSharedFlow()
+    @VisibleForTesting
+    var flowActionJob: Job? = null
 
     @VisibleForTesting
     val flowAction by lazy(LazyThreadSafetyMode.NONE) {
         flowCaActionStream.flowAction()
             .filterIsInstance(actionClass)
-            .map {
+            .onEach {
                 reducer(action = it)
             }
-            .onEach {
-                flowCaActionStream.nextAction(it)
-            }
     }
 
-    fun loadAction() {
-        flowAction
+    internal fun loadAction() {
+        cancelAction()
+
+        flowActionJob = flowAction
             .launchIn(viewModelScope)
+
+        onLoad()
     }
 
-    fun sendSideEffect(sideEffect: SIDE_EFFECT) {
-        _sideEffect.tryEmit(sideEffect)
+    open fun onLoad() { // custom open
+        // Do nothing
     }
 
-    abstract suspend fun reducer(action: ACTION): CaAction
+    internal fun cancelAction() {
+        flowActionJob?.cancel()
+        flowActionJob = null
+
+        onCancel()
+    }
+
+    open fun onCancel() { // custom open
+        // Do nothing
+    }
+
+    fun nextAction(action: CaAction) {
+        flowCaActionStream.nextAction(action)
+    }
+
+    abstract suspend fun reducer(action: CA_ACTION)
 }

@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.action.system.CaSideEffect
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiState
 import tech.thdev.composable.architecture.base.CaViewModel
@@ -13,8 +12,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CaAlertViewModel @Inject constructor(
-    private val flowCaActionStream: FlowCaActionStream,
-) : CaViewModel<CaAlertAction, CaSideEffect>(
+    flowCaActionStream: FlowCaActionStream,
+) : CaViewModel<CaAlertAction>(
     flowCaActionStream = flowCaActionStream,
     actionClass = CaAlertAction::class,
 ) {
@@ -22,7 +21,7 @@ class CaAlertViewModel @Inject constructor(
     private val _alertUiState = MutableStateFlow<CaAlertUiState?>(null)
     internal val alertUiState = _alertUiState.asStateFlow()
 
-    override suspend fun reducer(action: CaAlertAction): CaAction =
+    override suspend fun reducer(action: CaAlertAction) {
         when (action) {
             is CaAlertAction.Dialog -> {
                 _alertUiState.value = CaAlertUiState.Dialog(
@@ -37,7 +36,6 @@ class CaAlertViewModel @Inject constructor(
                     dismissOnBackPress = action.dismissOnBackPress,
                     dismissOnClickOutside = action.dismissOnClickOutside,
                 )
-                CaAction.None
             }
 
             is CaAlertAction.Snack -> {
@@ -48,9 +46,11 @@ class CaAlertViewModel @Inject constructor(
                     onDismiss = action.onDismiss,
                     duration = action.duration.convert(),
                 )
-                CaAction.None
             }
+
+            is CaAlertAction.None -> {}
         }
+    }
 
     private fun CaAlertAction.Snack.Duration.convert(): SnackbarDuration =
         when (this) {
@@ -60,6 +60,6 @@ class CaAlertViewModel @Inject constructor(
 
     internal fun send(nextEvent: CaAction) {
         _alertUiState.value = null
-        flowCaActionStream.nextAction(nextEvent)
+        nextAction(nextEvent)
     }
 }

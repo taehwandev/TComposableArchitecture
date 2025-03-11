@@ -6,8 +6,8 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import tech.thdev.composable.architecture.action.system.CaAction
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import tech.thdev.composable.architecture.alert.system.CaAlertAction
 import tech.thdev.composable.architecture.app.R
@@ -30,7 +30,7 @@ internal class MainViewModelTest {
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         viewModel.flowAction.test {
-            Assert.assertEquals(CaAction.None, awaitItem())
+            Assert.assertEquals(mockItem, awaitItem())
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -48,7 +48,9 @@ internal class MainViewModelTest {
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         viewModel.flowAction.test {
-            Assert.assertEquals(
+            Assert.assertEquals(mockItem, awaitItem())
+
+            verify(flowCaActionStream).nextAction(
                 CaAlertAction.Dialog(
                     icon = R.drawable.baseline_info_24,
                     title = "title",
@@ -61,8 +63,7 @@ internal class MainViewModelTest {
                     onDismissButtonAction = CaAlertAction.Snack(
                         message = "Dismiss",
                     ),
-                ),
-                awaitItem()
+                )
             )
 
             cancelAndIgnoreRemainingEvents()

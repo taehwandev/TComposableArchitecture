@@ -2,13 +2,13 @@ package tech.thdev.composable.architecture.alert.system
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.thdev.composable.architecture.alert.system.compose.CaDialogScreen
 import tech.thdev.composable.architecture.alert.system.compose.CaSnackScreen
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiState
+import tech.thdev.composable.architecture.lifecycle.LaunchedLifecycleViewModel
 
 @Composable
 fun CaAlertScreen(
@@ -45,7 +45,7 @@ private fun InternalCaAlertScreen(
         else -> {} // Do nothing
     }
 
-    LaunchedEffect(Unit) {
-        caAlertViewModel.loadAction()
-    }
+    LaunchedLifecycleViewModel(
+        viewModel = caAlertViewModel,
+    )
 }

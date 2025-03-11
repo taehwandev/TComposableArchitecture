@@ -1,4 +1,4 @@
-package tech.thdev.composable.architecture.util
+package tech.thdev.composable.architecture.lifecycle
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @SuppressLint("ComposableNaming")
 @Composable
-fun <T> Flow<T>.collectAsEvent(
+fun <T> Flow<T>.collectLifecycleEvent(
     state: Lifecycle.State = Lifecycle.State.STARTED,
     onBody: (item: T) -> Unit,
 ) {
