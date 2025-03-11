@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import tech.thdev.composable.architecture.alert.system.CaAlertAction
 import tech.thdev.composable.architecture.base.CaViewModel
+import tech.thdev.composable.architecture.router.system.CaRouterAction
+import tech.thdev.composable.architecture.sample.feature.detail.api.DetailActivityRouter
+import tech.thdev.composable.architecture.sample.feature.detail.api.model.DetailData
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +38,17 @@ class MainViewModel @Inject constructor(
                         dismissButtonText = action.dismissButtonText,
                         onDismissButtonAction = CaAlertAction.Snack(
                             message = "Dismiss",
+                        ),
+                    )
+                )
+            }
+
+            is Action.ShowDetail -> {
+                nextAction(
+                    CaRouterAction.MoveActivityVisit(
+                        activityRoute = DetailActivityRouter::class,
+                        argumentMap = mapOf(
+                            DetailActivityRouter.PUT_DATA to DetailData(text = action.message),
                         ),
                     )
                 )

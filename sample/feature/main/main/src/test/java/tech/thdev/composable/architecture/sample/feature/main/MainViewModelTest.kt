@@ -10,6 +10,9 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import tech.thdev.composable.architecture.alert.system.CaAlertAction
+import tech.thdev.composable.architecture.router.system.CaRouterAction
+import tech.thdev.composable.architecture.sample.feature.detail.api.DetailActivityRouter
+import tech.thdev.composable.architecture.sample.feature.detail.api.model.DetailData
 import tech.thdev.composable.architecture.sample.resource.R
 
 internal class MainViewModelTest {
@@ -63,6 +66,29 @@ internal class MainViewModelTest {
                     onDismissButtonAction = CaAlertAction.Snack(
                         message = "Dismiss",
                     ),
+                )
+            )
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test ShowDetail`() = runTest {
+        val mockItem = Action.ShowDetail(
+            message = "Show detail activity",
+        )
+        whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
+
+        viewModel.flowAction.test {
+            Assert.assertEquals(mockItem, awaitItem())
+
+            verify(flowCaActionStream).nextAction(
+                CaRouterAction.MoveActivityVisit(
+                    activityRoute = DetailActivityRouter::class,
+                    argumentMap = mapOf(
+                        DetailActivityRouter.PUT_DATA to DetailData(text = "Show detail activity")
+                    )
                 )
             )
 

@@ -1,9 +1,12 @@
-package tech.thdev.composable.architecture.sample.feature.main
+package tech.thdev.composable.architecture.sample.feature.detail
 
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -14,18 +17,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import tech.thdev.composable.architecture.action.system.compose.LocalCaActionOwner
+import tech.thdev.composable.architecture.action.system.send
 import tech.thdev.composable.architecture.alert.system.CaAlertScreen
 import tech.thdev.composable.architecture.base.CaActionActivity
 import tech.thdev.composable.architecture.lifecycle.LaunchedLifecycleViewModel
-import tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent
 import tech.thdev.composable.architecture.router.system.LaunchedCaRouter
-import tech.thdev.composable.architecture.sample.feature.main.compose.MainScreen
+import tech.thdev.composable.architecture.sample.feature.detail.compose.DetailScreen
 import tech.thdev.composable.architecture.sample.resource.theme.TComposableArchitectureTheme
 
 @AndroidEntryPoint
-class MainActivity : CaActionActivity() {
+class DetailActivity : CaActionActivity() {
 
-    private val mainViewModel by viewModels<MainViewModel>()
+    private val detailViewModel by viewModels<DetailViewModel>()
 
     @Composable
     override fun ContentView() {
@@ -35,17 +39,28 @@ class MainActivity : CaActionActivity() {
             CaAlertScreen(
                 snackbarHostState = snackbarHostState,
             )
-
             LaunchedCaRouter()
             LaunchedLifecycleViewModel(
-                viewModel = mainViewModel,
+                viewModel = detailViewModel,
             )
+
+            val action = LocalCaActionOwner.current
 
             Scaffold(
                 topBar = {
                     TopAppBar(
+                        navigationIcon = {
+                            IconButton(
+                                onClick = action.send(Action.MoveBack),
+                            ) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = "back",
+                                )
+                            }
+                        },
                         title = {
-                            Text("Composable Architecture example")
+                            Text("Detail view")
                         }
                     )
                 },
@@ -55,19 +70,11 @@ class MainActivity : CaActionActivity() {
                 modifier = Modifier
                     .fillMaxSize()
             ) { innerPadding ->
-                MainScreen(
+                DetailScreen(
                     modifier = Modifier
                         .padding(innerPadding)
                         .padding(horizontal = 10.dp)
                 )
-            }
-
-            mainViewModel.sideEffect.collectLifecycleEvent {
-                when (it) {
-                    SideEffect.ShowToast -> {
-                        Toast.makeText(this@MainActivity, "message", Toast.LENGTH_SHORT).show()
-                    }
-                }
             }
         }
     }
