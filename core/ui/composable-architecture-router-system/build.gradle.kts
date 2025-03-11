@@ -6,11 +6,11 @@ plugins {
     alias(libs.plugins.tech.thdev.android.library.publish)
 }
 
-setNamespace("alert.system")
+setNamespace("router.system")
 
 val (majorVersion, minorVersion, patchVersion, code) = getVersionInfo()
 
-ext["libraryName"] = "composable-architecture-alert-system"
+ext["libraryName"] = "composable-architecture-router-system"
 ext["libraryVersion"] = "$majorVersion.$minorVersion.$patchVersion"
 ext["description"] = Publish.DESCRIPTION
 ext["url"] = Publish.PUBLISH_URL
@@ -41,8 +41,8 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.navigation)
+    implementation(libs.androidx.compose.navigation.hilt)
 
     implementation(libs.androidx.compose.lifecycle.viewModel)
 

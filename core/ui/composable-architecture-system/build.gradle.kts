@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.tech.thdev.android.library.publish)
 }
 
-setNamespace("composable.architecture.system")
+setNamespace("system")
 
 val (majorVersion, minorVersion, patchVersion, code) = getVersionInfo()
 
