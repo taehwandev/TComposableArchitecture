@@ -12,17 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TComposableArchitecture"
-        tools:targetApi="31">
-        <activity
-            android:name=".feature.main.MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.TComposableArchitecture">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-    </application>
+        tools:targetApi="31" />
 
 </manifest>

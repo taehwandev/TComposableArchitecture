@@ -34,3 +34,12 @@ include(
     ":core:ui:composable-architecture-alert-system",
     ":core:ui:composable-architecture-router-system",
 )
+
+include(
+    ":sample:core:ui:resource",
+)
+
+include(
+    ":sample:feature:main:main",
+    ":sample:feature:main:main-api",
+)

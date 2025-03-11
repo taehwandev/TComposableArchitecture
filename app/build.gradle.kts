@@ -35,4 +35,8 @@ dependencies {
     projects.core.filterImplementation {
         implementation(it)
     }
+
+    projects.sample.filterImplementation {
+        implementation(it)
+    }
 }
