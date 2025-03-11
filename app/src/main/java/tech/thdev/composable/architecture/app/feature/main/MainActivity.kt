@@ -10,7 +10,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,7 +18,8 @@ import tech.thdev.composable.architecture.alert.system.CaAlertScreen
 import tech.thdev.composable.architecture.app.feature.main.compose.MainScreen
 import tech.thdev.composable.architecture.app.feature.main.ui.theme.TComposableArchitectureTheme
 import tech.thdev.composable.architecture.base.CaActionActivity
-import tech.thdev.composable.architecture.util.collectAsEvent
+import tech.thdev.composable.architecture.lifecycle.LaunchedLifecycleViewModel
+import tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent
 
 @AndroidEntryPoint
 class MainActivity : CaActionActivity() {
@@ -56,11 +56,11 @@ class MainActivity : CaActionActivity() {
                 )
             }
 
-            LaunchedEffect(Unit) {
-                mainViewModel.loadAction()
-            }
+            LaunchedLifecycleViewModel(
+                viewModel = mainViewModel,
+            )
 
-            mainViewModel.sideEffect.collectAsEvent {
+            mainViewModel.sideEffect.collectLifecycleEvent {
                 when (it) {
                     SideEffect.ShowToast -> {
                         Toast.makeText(this@MainActivity, "message", Toast.LENGTH_SHORT).show()

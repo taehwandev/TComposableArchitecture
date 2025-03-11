@@ -6,7 +6,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import tech.thdev.composable.architecture.action.system.CaActionSender
 
 /**
- * Define [CaActionSend] at the beginning of the Compose hierarchy.
+ * Define [tech.thdev.composable.architecture.action.system.CaActionSender] at the beginning of the Compose hierarchy.
  * Since Hilt Singleton is used, it's injected as follows:
  *
  * Apply action

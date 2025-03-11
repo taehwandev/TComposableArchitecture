@@ -1,23 +1,16 @@
 package tech.thdev.composable.architecture.alert.system
 
-import android.os.Build
 import app.cash.turbine.test
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import tech.thdev.composable.architecture.action.system.CaAction
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiState
 
-@Config(sdk = [Build.VERSION_CODES.VANILLA_ICE_CREAM])
-@RunWith(RobolectricTestRunner::class)
 internal class DialogViewModelTest {
 
     private val flowCaActionStream = mock<FlowCaActionStream>()
@@ -37,10 +30,10 @@ internal class DialogViewModelTest {
             title = "title",
             message = "message",
             confirmButtonText = "confirmButtonText",
-            onConfirmButtonAction = CaAction.None,
+            onConfirmButtonAction = CaAlertAction.None,
             dismissButtonText = "dismissButtonText",
-            onDismissButtonAction = CaAction.None,
-            onDismissRequest = CaAction.None,
+            onDismissButtonAction = CaAlertAction.None,
+            onDismissRequest = CaAlertAction.None,
         )
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
@@ -51,10 +44,8 @@ internal class DialogViewModelTest {
                 confirmButtonText = "confirmButtonText",
                 dismissButtonText = "dismissButtonText",
             )
-            Assert.assertEquals(CaAction.None, awaitItem())
+            Assert.assertEquals(mockItem, awaitItem())
             Assert.assertEquals(convert, caAlertViewModel.alertUiState.value)
-
-            verify(flowCaActionStream).nextAction(CaAction.None)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -65,8 +56,8 @@ internal class DialogViewModelTest {
         val mockItem = CaAlertAction.Snack(
             message = "message",
             actionLabel = "actionLabel",
-            onAction = CaAction.None,
-            onDismiss = CaAction.None,
+            onAction = CaAlertAction.None,
+            onDismiss = CaAlertAction.None,
         )
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
@@ -75,10 +66,8 @@ internal class DialogViewModelTest {
                 message = "message",
                 actionLabel = "actionLabel",
             )
-            Assert.assertEquals(CaAction.None, awaitItem())
+            Assert.assertEquals(mockItem, awaitItem())
             Assert.assertEquals(convert, caAlertViewModel.alertUiState.value)
-
-            verify(flowCaActionStream).nextAction(CaAction.None)
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -86,8 +75,8 @@ internal class DialogViewModelTest {
 
     @Test
     fun `test send`() {
-        caAlertViewModel.send(CaAction.None)
+        caAlertViewModel.send(CaAlertAction.None)
         Assert.assertNull(caAlertViewModel.alertUiState.value)
-        verify(flowCaActionStream).nextAction(CaAction.None)
+        verify(flowCaActionStream).nextAction(CaAlertAction.None)
     }
 }

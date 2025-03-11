@@ -3,13 +3,15 @@ package tech.thdev.composable.architecture.action.system
 import kotlinx.coroutines.flow.Flow
 
 /**
- * Definitions for utilizing [CaAction] events in a [ViewModel].
+ * Definitions for utilizing [CaAction] events in a [tech.thdev.composable.architecture.base.CaViewModel].
  *
  * ```kotlin
- * @HiltViewModel
- * class MainViewModel @Inject constructor(
+ * class MainViewModel constructor(
  *     flowCaActionStream: FlowCaActionStream,
  * ) : ViewModel() {
+ *
+ *      private val _sideEffect = Channel<InternalSideEffect>(Channel.BUFFERED)
+ *      internal val sideEffect = _sideEffect.receiveAsFlow()
  *
  *     // Handle events received through CaActionSender
  *     @VisibleForTesting
@@ -26,17 +28,10 @@ import kotlinx.coroutines.flow.Flow
  *     }
  *
  *     // Definition for using CA Action as a reducer
- *     private fun reducer(action: CaAction): Flow<CaAction> {
+ *     private fun reducer(action: CaAction) {
  *         return when (action) {
  *             is DefaultAction.AppEnd -> {
- *                 flowOf(CaActionNone)
- *                     .onEach {
- *                         _sideEffect.tryEmit(SideEffect.End)
- *                     }
- *             }
- *
- *             else -> {
- *                 flowOf(CaActionNone)
+ *                  _sideEffect.send(SideEffect.End)
  *             }
  *         }
  *     }

@@ -6,6 +6,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import tech.thdev.composable.architecture.action.system.CaAction
+import tech.thdev.composable.architecture.alert.system.CaAlertAction
 
 @Stable
 internal sealed interface CaAlertUiState {
@@ -30,10 +31,10 @@ internal sealed interface CaAlertUiState {
                 title = "",
                 message = "",
                 confirmButtonText = "",
-                onConfirmButtonAction = CaAction.None,
+                onConfirmButtonAction = CaAlertAction.None,
                 dismissButtonText = "",
-                onDismissButtonAction = CaAction.None,
-                onDismissRequest = CaAction.None,
+                onDismissButtonAction = CaAlertAction.None,
+                onDismissRequest = CaAlertAction.None,
                 icon = View.NO_ID,
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true,
@@ -59,8 +60,8 @@ internal sealed interface CaAlertUiState {
             val Default = Snack(
                 message = "",
                 actionLabel = "",
-                onAction = CaAction.None,
-                onDismiss = CaAction.None,
+                onAction = CaAlertAction.None,
+                onDismiss = CaAlertAction.None,
                 duration = SnackbarDuration.Indefinite,
             )
         }
