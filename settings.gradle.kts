@@ -32,4 +32,5 @@ include(":app")
 include(
     ":core:ui:composable-architecture-system",
     ":core:ui:composable-architecture-alert-system",
+    ":core:ui:composable-architecture-router-system",
 )
