@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun <T> Flow<T>.collectLifecycleEvent(
     state: Lifecycle.State = Lifecycle.State.STARTED,
-    onBody: (item: T) -> Unit,
+    onBody: suspend (item: T) -> Unit,
 ) {
     val body by remember { mutableStateOf(onBody) }
     val lifecycle = LocalLifecycleOwner.current.lifecycle

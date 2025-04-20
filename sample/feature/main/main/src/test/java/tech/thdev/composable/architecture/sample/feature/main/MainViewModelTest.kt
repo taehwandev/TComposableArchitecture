@@ -54,16 +54,16 @@ internal class MainViewModelTest {
             Assert.assertEquals(mockItem, awaitItem())
 
             verify(flowCaActionStream).nextAction(
-                CaAlertAction.Dialog(
+                CaAlertAction.ShowDialog(
                     icon = R.drawable.baseline_info_24,
                     title = "title",
                     message = "message",
                     confirmButtonText = "confirmButtonText",
-                    onConfirmButtonAction = CaAlertAction.Snack(
+                    onConfirmButtonAction = CaAlertAction.ShowSnack(
                         message = "Confirm",
                     ),
                     dismissButtonText = "dismissButtonText",
-                    onDismissButtonAction = CaAlertAction.Snack(
+                    onDismissButtonAction = CaAlertAction.ShowSnack(
                         message = "Dismiss",
                     ),
                 )

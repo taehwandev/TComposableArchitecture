@@ -8,7 +8,9 @@ sealed interface CaAlertAction : CaAction {
 
     data object None : CaAlertAction
 
-    data class Dialog(
+    data object HideDialog : CaAlertAction
+
+    data class ShowDialog(
         val title: String = "",
         val message: String = "",
         val confirmButtonText: String = "",
@@ -21,7 +23,7 @@ sealed interface CaAlertAction : CaAction {
         val dismissOnClickOutside: Boolean = true,
     ) : CaAlertAction
 
-    data class Snack(
+    data class ShowSnack(
         val message: String = "",
         val actionLabel: String = "",
         val onAction: CaAction = None,
