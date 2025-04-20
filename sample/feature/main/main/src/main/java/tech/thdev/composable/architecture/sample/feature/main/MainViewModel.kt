@@ -27,16 +27,16 @@ class MainViewModel @Inject constructor(
 
             is Action.ShowAlert -> {
                 nextAction(
-                    CaAlertAction.Dialog(
+                    CaAlertAction.ShowDialog(
                         icon = action.icon,
                         title = action.title,
                         message = action.message,
                         confirmButtonText = action.confirmButtonText,
-                        onConfirmButtonAction = CaAlertAction.Snack(
+                        onConfirmButtonAction = CaAlertAction.ShowSnack(
                             message = "Confirm",
                         ),
                         dismissButtonText = action.dismissButtonText,
-                        onDismissButtonAction = CaAlertAction.Snack(
+                        onDismissButtonAction = CaAlertAction.ShowSnack(
                             message = "Dismiss",
                         ),
                     )

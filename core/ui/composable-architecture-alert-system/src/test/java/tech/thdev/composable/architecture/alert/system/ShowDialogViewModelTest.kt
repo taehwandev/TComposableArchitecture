@@ -1,6 +1,7 @@
 package tech.thdev.composable.architecture.alert.system
 
 import app.cash.turbine.test
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -9,9 +10,9 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.thdev.composable.architecture.action.system.FlowCaActionStream
-import tech.thdev.composable.architecture.alert.system.model.CaAlertUiState
+import tech.thdev.composable.architecture.alert.system.model.CaAlertUiStateDialogUiState
 
-internal class DialogViewModelTest {
+internal class ShowDialogViewModelTest {
 
     private val flowCaActionStream = mock<FlowCaActionStream>()
 
@@ -21,12 +22,12 @@ internal class DialogViewModelTest {
 
     @Test
     fun `test initData`() {
-        Assert.assertNull(caAlertViewModel.alertUiState.value)
+        Assert.assertEquals(CaAlertUiStateDialogUiState.Default, caAlertViewModel.alertUiStateDialogUiState.value)
     }
 
     @Test
-    fun `test Alert`() = runTest {
-        val mockItem = CaAlertAction.Dialog(
+    fun `test ShowAlert`() = runTest {
+        val mockItem = CaAlertAction.ShowDialog(
             title = "title",
             message = "message",
             confirmButtonText = "confirmButtonText",
@@ -38,14 +39,31 @@ internal class DialogViewModelTest {
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         caAlertViewModel.flowAction.test {
-            val convert = CaAlertUiState.Dialog.Default.copy(
+            val convert = CaAlertUiStateDialogUiState.Default.copy(
                 title = "title",
                 message = "message",
                 confirmButtonText = "confirmButtonText",
                 dismissButtonText = "dismissButtonText",
             )
             Assert.assertEquals(mockItem, awaitItem())
-            Assert.assertEquals(convert, caAlertViewModel.alertUiState.value)
+            Assert.assertEquals(convert, caAlertViewModel.alertUiStateDialogUiState.value)
+            Assert.assertEquals(CaAlertSideEffect.ShowDialog, caAlertViewModel.sideEffect.first())
+
+            verify(flowCaActionStream).flowAction()
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `test hideAlert`() = runTest {
+        whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(CaAlertAction.HideDialog))
+
+        caAlertViewModel.flowAction.test {
+            Assert.assertEquals(CaAlertUiStateDialogUiState.Default, caAlertViewModel.alertUiStateDialogUiState.value)
+            Assert.assertEquals(CaAlertSideEffect.HideDialog, caAlertViewModel.sideEffect.first())
+
+            verify(flowCaActionStream).flowAction()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -53,7 +71,7 @@ internal class DialogViewModelTest {
 
     @Test
     fun `test Snack`() = runTest {
-        val mockItem = CaAlertAction.Snack(
+        val mockItem = CaAlertAction.ShowSnack(
             message = "message",
             actionLabel = "actionLabel",
             onAction = CaAlertAction.None,
@@ -62,21 +80,16 @@ internal class DialogViewModelTest {
         whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         caAlertViewModel.flowAction.test {
-            val convert = CaAlertUiState.Snack.Default.copy(
+            val convert = CaAlertSideEffect.ShowSnack.Default.copy(
                 message = "message",
                 actionLabel = "actionLabel",
             )
             Assert.assertEquals(mockItem, awaitItem())
-            Assert.assertEquals(convert, caAlertViewModel.alertUiState.value)
+            Assert.assertEquals(convert, caAlertViewModel.sideEffect.first())
+
+            verify(flowCaActionStream).flowAction()
 
             cancelAndIgnoreRemainingEvents()
         }
-    }
-
-    @Test
-    fun `test send`() {
-        caAlertViewModel.send(CaAlertAction.None)
-        Assert.assertNull(caAlertViewModel.alertUiState.value)
-        verify(flowCaActionStream).nextAction(CaAlertAction.None)
     }
 }

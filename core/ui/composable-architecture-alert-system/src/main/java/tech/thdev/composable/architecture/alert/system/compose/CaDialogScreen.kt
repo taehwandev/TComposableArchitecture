@@ -10,54 +10,54 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.DialogProperties
 import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.alert.system.model.CaAlertUiState
+import tech.thdev.composable.architecture.alert.system.model.CaAlertUiStateDialogUiState
 
 @Composable
 internal fun CaDialogScreen(
-    caAlertUiState: CaAlertUiState.Dialog,
+    caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState,
     onAction: (nextAction: CaAction) -> Unit,
 ) {
     AlertDialog(
         icon = {
-            if (caAlertUiState.icon != View.NO_ID) {
+            if (caAlertUiStateDialogUiState.icon != View.NO_ID) {
                 Icon(
-                    painter = painterResource(id = caAlertUiState.icon),
+                    painter = painterResource(id = caAlertUiStateDialogUiState.icon),
                     contentDescription = null,
                 )
             }
         },
         title = {
-            if (caAlertUiState.title.isNotEmpty()) {
-                Text(text = caAlertUiState.title)
+            if (caAlertUiStateDialogUiState.title.isNotEmpty()) {
+                Text(text = caAlertUiStateDialogUiState.title)
             }
         },
         text = {
-            if (caAlertUiState.message.isNotEmpty()) {
-                Text(text = caAlertUiState.message)
+            if (caAlertUiStateDialogUiState.message.isNotEmpty()) {
+                Text(text = caAlertUiStateDialogUiState.message)
             }
         },
         onDismissRequest = {
-            onAction(caAlertUiState.onDismissRequest)
+            onAction(caAlertUiStateDialogUiState.onDismissRequest)
         },
         confirmButton = {
-            if (caAlertUiState.confirmButtonText.isNotEmpty()) {
+            if (caAlertUiStateDialogUiState.confirmButtonText.isNotEmpty()) {
                 TextButton(
                     onClick = {
-                        onAction(caAlertUiState.onConfirmButtonAction)
+                        onAction(caAlertUiStateDialogUiState.onConfirmButtonAction)
                     },
                 ) {
-                    Text(caAlertUiState.confirmButtonText)
+                    Text(caAlertUiStateDialogUiState.confirmButtonText)
                 }
             }
         },
         dismissButton = {
-            if (caAlertUiState.dismissButtonText.isNotEmpty()) {
+            if (caAlertUiStateDialogUiState.dismissButtonText.isNotEmpty()) {
                 TextButton(
                     onClick = {
-                        onAction(caAlertUiState.onDismissButtonAction)
+                        onAction(caAlertUiStateDialogUiState.onDismissButtonAction)
                     }
                 ) {
-                    Text(caAlertUiState.dismissButtonText)
+                    Text(caAlertUiStateDialogUiState.dismissButtonText)
                 }
             }
         },
@@ -74,7 +74,7 @@ internal fun CaDialogScreen(
 @Composable
 private fun PreviewCaDialogScreen() {
     CaDialogScreen(
-        caAlertUiState = CaAlertUiState.Dialog.Default.copy(
+        caAlertUiStateDialogUiState = CaAlertUiStateDialogUiState.Default.copy(
             title = "title",
             message = "A dialog is a type of modal window that appears in front of app content to provide critical" +
                     "information, or ask for a decision to be made.",
