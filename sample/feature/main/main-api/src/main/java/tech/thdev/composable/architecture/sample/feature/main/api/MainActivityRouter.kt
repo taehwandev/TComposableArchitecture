@@ -1,5 +1,5 @@
 package tech.thdev.composable.architecture.sample.feature.main.api
 
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 
-interface MainActivityRouter : CaActivityRoute
+interface MainActivityRouter : ActivityRoute

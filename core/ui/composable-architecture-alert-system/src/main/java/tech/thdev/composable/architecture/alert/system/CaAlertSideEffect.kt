@@ -1,7 +1,7 @@
 package tech.thdev.composable.architecture.alert.system
 
 import androidx.compose.material3.SnackbarDuration
-import tech.thdev.composable.architecture.action.system.CaAction
+import tech.thdev.composable.architecture.action.system.Action
 
 internal sealed interface CaAlertSideEffect {
 
@@ -12,8 +12,8 @@ internal sealed interface CaAlertSideEffect {
     data class ShowSnack(
         val message: String,
         val actionLabel: String,
-        val onAction: CaAction,
-        val onDismiss: CaAction,
+        val onAction: Action,
+        val onDismiss: Action,
         val duration: SnackbarDuration = if (actionLabel.isNotEmpty()) {
             SnackbarDuration.Indefinite
         } else {

@@ -2,9 +2,9 @@ package tech.thdev.composable.architecture.alert.system
 
 import android.view.View
 import androidx.annotation.DrawableRes
-import tech.thdev.composable.architecture.action.system.CaAction
+import tech.thdev.composable.architecture.action.system.Action
 
-sealed interface CaAlertAction : CaAction {
+sealed interface CaAlertAction : Action {
 
     data object None : CaAlertAction
 
@@ -14,10 +14,10 @@ sealed interface CaAlertAction : CaAction {
         val title: String = "",
         val message: String = "",
         val confirmButtonText: String = "",
-        val onConfirmButtonAction: CaAction = None,
+        val onConfirmButtonAction: Action = None,
         val dismissButtonText: String = "",
-        val onDismissButtonAction: CaAction = None,
-        val onDismissRequest: CaAction = None,
+        val onDismissButtonAction: Action = None,
+        val onDismissRequest: Action = None,
         @DrawableRes val icon: Int = View.NO_ID,
         val dismissOnBackPress: Boolean = true,
         val dismissOnClickOutside: Boolean = true,
@@ -26,8 +26,8 @@ sealed interface CaAlertAction : CaAction {
     data class ShowSnack(
         val message: String = "",
         val actionLabel: String = "",
-        val onAction: CaAction = None,
-        val onDismiss: CaAction = None,
+        val onAction: Action = None,
+        val onDismiss: Action = None,
         val duration: Duration = if (actionLabel.isNotEmpty()) {
             Duration.Indefinite
         } else {

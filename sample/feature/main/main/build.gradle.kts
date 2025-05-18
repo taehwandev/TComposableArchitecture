@@ -6,5 +6,6 @@ setNamespace("sample.feature.main")
 
 dependencies {
     implementation(projects.sample.feature.main.mainApi)
-    implementation(projects.sample.feature.detail.detailApi)
+
+    implementation(projects.sample.feature.main.screen.screenMain)
 }

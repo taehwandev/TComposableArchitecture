@@ -3,7 +3,7 @@ package tech.thdev.composable.architecture.alert.system.model
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
-import tech.thdev.composable.architecture.action.system.CaAction
+import tech.thdev.composable.architecture.action.system.Action
 import tech.thdev.composable.architecture.alert.system.CaAlertAction
 
 @Immutable
@@ -11,10 +11,10 @@ data class CaAlertUiStateDialogUiState(
     val title: String,
     val message: String,
     val confirmButtonText: String,
-    val onConfirmButtonAction: CaAction,
+    val onConfirmButtonAction: Action,
     val dismissButtonText: String,
-    val onDismissButtonAction: CaAction,
-    val onDismissRequest: CaAction,
+    val onDismissButtonAction: Action,
+    val onDismissRequest: Action,
     @DrawableRes val icon: Int,
     val dismissOnBackPress: Boolean,
     val dismissOnClickOutside: Boolean,

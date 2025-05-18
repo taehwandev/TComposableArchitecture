@@ -9,15 +9,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
-import tech.thdev.composable.architecture.action.system.FlowCaActionStream
+import tech.thdev.composable.architecture.action.system.FlowActionStream
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiStateDialogUiState
 
 internal class ShowDialogViewModelTest {
 
-    private val flowCaActionStream = mock<FlowCaActionStream>()
+    private val flowActionStream = mock<FlowActionStream>()
 
-    private val caAlertViewModel = CaAlertViewModel(
-        flowCaActionStream = flowCaActionStream,
+    private val caAlertViewModel = ActionAlertViewModel(
+        flowActionStream = flowActionStream,
     )
 
     @Test
@@ -36,7 +36,7 @@ internal class ShowDialogViewModelTest {
             onDismissButtonAction = CaAlertAction.None,
             onDismissRequest = CaAlertAction.None,
         )
-        whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
+        whenever(flowActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         caAlertViewModel.flowAction.test {
             val convert = CaAlertUiStateDialogUiState.Default.copy(
@@ -49,7 +49,7 @@ internal class ShowDialogViewModelTest {
             Assert.assertEquals(convert, caAlertViewModel.alertUiStateDialogUiState.value)
             Assert.assertEquals(CaAlertSideEffect.ShowDialog, caAlertViewModel.sideEffect.first())
 
-            verify(flowCaActionStream).flowAction()
+            verify(flowActionStream).flowAction()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -57,13 +57,13 @@ internal class ShowDialogViewModelTest {
 
     @Test
     fun `test hideAlert`() = runTest {
-        whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(CaAlertAction.HideDialog))
+        whenever(flowActionStream.flowAction()).thenReturn(flowOf(CaAlertAction.HideDialog))
 
         caAlertViewModel.flowAction.test {
             Assert.assertEquals(CaAlertUiStateDialogUiState.Default, caAlertViewModel.alertUiStateDialogUiState.value)
             Assert.assertEquals(CaAlertSideEffect.HideDialog, caAlertViewModel.sideEffect.first())
 
-            verify(flowCaActionStream).flowAction()
+            verify(flowActionStream).flowAction()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -77,7 +77,7 @@ internal class ShowDialogViewModelTest {
             onAction = CaAlertAction.None,
             onDismiss = CaAlertAction.None,
         )
-        whenever(flowCaActionStream.flowAction()).thenReturn(flowOf(mockItem))
+        whenever(flowActionStream.flowAction()).thenReturn(flowOf(mockItem))
 
         caAlertViewModel.flowAction.test {
             val convert = CaAlertSideEffect.ShowSnack.Default.copy(
@@ -87,7 +87,7 @@ internal class ShowDialogViewModelTest {
             Assert.assertEquals(mockItem, awaitItem())
             Assert.assertEquals(convert, caAlertViewModel.sideEffect.first())
 
-            verify(flowCaActionStream).flowAction()
+            verify(flowActionStream).flowAction()
 
             cancelAndIgnoreRemainingEvents()
         }

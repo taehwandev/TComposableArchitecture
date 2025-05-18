@@ -9,13 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.DialogProperties
-import tech.thdev.composable.architecture.action.system.CaAction
+import tech.thdev.composable.architecture.action.system.Action
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiStateDialogUiState
 
 @Composable
 internal fun CaDialogScreen(
     caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState,
-    onAction: (nextAction: CaAction) -> Unit,
+    onAction: (nextAction: Action) -> Unit,
 ) {
     AlertDialog(
         icon = {

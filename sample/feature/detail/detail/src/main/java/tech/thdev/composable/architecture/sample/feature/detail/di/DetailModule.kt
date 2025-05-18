@@ -6,18 +6,18 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoMap
 import tech.thdev.composable.architecture.router.system.di.CaRouterKey
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 import tech.thdev.composable.architecture.sample.feature.detail.DetailActivityRouteImpl
 import tech.thdev.composable.architecture.sample.feature.detail.api.DetailActivityRouter
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class DetailModule {
+internal abstract class DetailModule {
 
     @Binds
     @IntoMap
     @CaRouterKey(DetailActivityRouter::class)
     abstract fun bindDetailActivityRoute(
         mainActivityRoute: DetailActivityRouteImpl,
-    ): CaActivityRoute
+    ): ActivityRoute
 }

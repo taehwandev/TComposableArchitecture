@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.compose.navigation.hilt)
 
     implementation(libs.androidx.compose.lifecycle.viewModel)
+    implementation(libs.androidx.compose.activity)
 
     implementation(projects.core.ui.composableArchitectureSystem)
 }

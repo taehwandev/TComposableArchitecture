@@ -1,8 +1,8 @@
 package tech.thdev.composable.architecture.sample.feature.detail.api
 
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 
-interface DetailActivityRouter : CaActivityRoute {
+interface DetailActivityRouter : ActivityRoute {
 
     companion object {
 
