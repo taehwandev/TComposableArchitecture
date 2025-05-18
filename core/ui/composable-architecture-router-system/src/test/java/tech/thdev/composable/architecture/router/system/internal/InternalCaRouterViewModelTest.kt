@@ -10,7 +10,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import tech.thdev.composable.architecture.action.system.FlowCaActionStream
+import tech.thdev.composable.architecture.action.system.FlowActionStream
 import tech.thdev.composable.architecture.router.system.CaJourneyMapper
 import tech.thdev.composable.architecture.router.system.CaRouterAction
 import tech.thdev.composable.architecture.router.system.MockActivityRoute
@@ -18,13 +18,13 @@ import tech.thdev.composable.architecture.router.system.navigation.CaNavigationR
 
 class InternalCaRouterViewModelTest {
 
-    private val flowCaActionStream = mock<FlowCaActionStream>()
+    private val flowActionStream = mock<FlowActionStream>()
 
     private val mockActivityRoute = MockActivityRoute()
     private val journeyMapper = CaJourneyMapper(mapper = mapOf(MockActivityRoute::class.java to mockActivityRoute))
 
-    private val viewModel = InternalCaRouterViewModel(
-        flowCaActionStream = flowCaActionStream,
+    private val viewModel = InternalActionRouterViewModel(
+        flowActionStream = flowActionStream,
         journeyMapper = journeyMapper,
     )
 
@@ -35,7 +35,7 @@ class InternalCaRouterViewModelTest {
 
     @Before
     fun setUp() {
-        whenever(flowCaActionStream.flowAction()).thenReturn(sharedFlow)
+        whenever(flowActionStream.flowAction()).thenReturn(sharedFlow)
     }
 
     @Test

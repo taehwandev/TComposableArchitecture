@@ -1,7 +1,7 @@
 package tech.thdev.composable.architecture.router.system.internal
 
 import android.os.Parcelable
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 import tech.thdev.composable.architecture.router.system.navigation.CaNavigationRoute
 
 internal sealed interface InternalCaSideEffect {
@@ -13,7 +13,7 @@ internal sealed interface InternalCaSideEffect {
     data object MoveNavigationBack : InternalCaSideEffect
 
     data class MoveActivityVisit(
-        val activityRoute: CaActivityRoute,
+        val activityRoute: ActivityRoute,
         val argumentMap: Map<String, Parcelable>,
     ) : InternalCaSideEffect
 

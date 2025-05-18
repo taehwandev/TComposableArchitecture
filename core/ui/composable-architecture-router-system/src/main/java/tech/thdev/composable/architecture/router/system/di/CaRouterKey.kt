@@ -1,7 +1,7 @@
 package tech.thdev.composable.architecture.router.system.di
 
 import dagger.MapKey
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 import kotlin.reflect.KClass
 
 /**
@@ -42,5 +42,5 @@ import kotlin.reflect.KClass
  */
 @MapKey
 annotation class CaRouterKey(
-    val value: KClass<out CaActivityRoute>,
+    val value: KClass<out ActivityRoute>,
 )

@@ -1,12 +1,12 @@
 package tech.thdev.composable.architecture.router.system
 
 import android.os.Parcelable
-import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.router.system.navigation.CaActivityRoute
+import tech.thdev.composable.architecture.action.system.Action
+import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
 import tech.thdev.composable.architecture.router.system.navigation.CaNavigationRoute
 import kotlin.reflect.KClass
 
-sealed interface CaRouterAction : CaAction {
+sealed interface CaRouterAction : Action {
 
     data class MoveNavigation(
         val navigationRoute: CaNavigationRoute,
@@ -14,7 +14,7 @@ sealed interface CaRouterAction : CaAction {
 
     data object MoveNavigationBack : CaRouterAction
 
-    data class MoveActivityVisit<T : CaActivityRoute>(
+    data class MoveActivityVisit<T : ActivityRoute>(
         val activityRoute: KClass<T>,
         val argumentMap: Map<String, Parcelable> = emptyMap(),
     ) : CaRouterAction

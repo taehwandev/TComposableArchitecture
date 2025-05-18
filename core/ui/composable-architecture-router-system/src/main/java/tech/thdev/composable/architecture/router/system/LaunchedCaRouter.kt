@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import tech.thdev.composable.architecture.lifecycle.LaunchedLifecycleViewModel
-import tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent
-import tech.thdev.composable.architecture.router.system.internal.InternalCaRouterViewModel
+import tech.thdev.composable.architecture.action.system.lifecycle.LaunchedLifecycleActionViewModel
+import tech.thdev.composable.architecture.action.system.lifecycle.collectLifecycleEvent
+import tech.thdev.composable.architecture.router.system.internal.InternalActionRouterViewModel
 import tech.thdev.composable.architecture.router.system.internal.InternalCaSideEffect
 
 @Composable
@@ -22,9 +22,9 @@ fun LaunchedCaRouter(
 @Composable
 private fun InternalLaunchedCaRouter(
     navHostController: NavHostController? = null,
-    internalRouterViewModel: InternalCaRouterViewModel = hiltViewModel(),
+    internalRouterViewModel: InternalActionRouterViewModel = hiltViewModel(),
 ) {
-    LaunchedLifecycleViewModel(
+    LaunchedLifecycleActionViewModel(
         viewModel = internalRouterViewModel,
     )
 

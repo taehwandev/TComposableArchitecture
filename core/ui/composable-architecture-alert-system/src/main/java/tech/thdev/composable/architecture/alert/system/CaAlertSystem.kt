@@ -9,18 +9,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import tech.thdev.composable.architecture.action.system.CaAction
-import tech.thdev.composable.architecture.action.system.compose.LocalCaActionOwner
+import tech.thdev.composable.architecture.action.system.Action
+import tech.thdev.composable.architecture.action.system.compose.LocalActionSenderOwner
+import tech.thdev.composable.architecture.action.system.lifecycle.LaunchedLifecycleActionViewModel
+import tech.thdev.composable.architecture.action.system.lifecycle.collectLifecycleEvent
 import tech.thdev.composable.architecture.action.system.send
 import tech.thdev.composable.architecture.alert.system.compose.CaDialogScreen
 import tech.thdev.composable.architecture.alert.system.model.CaAlertUiStateDialogUiState
-import tech.thdev.composable.architecture.lifecycle.LaunchedLifecycleViewModel
-import tech.thdev.composable.architecture.lifecycle.collectLifecycleEvent
 
 @Composable
 fun CaAlertScreen(
     snackbarHostState: SnackbarHostState,
-    onDialogScreen: (@Composable (caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState, onAction: (nextAction: CaAction) -> Unit) -> Unit)? = null,
+    onDialogScreen: (@Composable (caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState, onAction: (nextAction: Action) -> Unit) -> Unit)? = null,
 ) {
     InternalCaAlertScreen(
         snackbarHostState = snackbarHostState,
@@ -31,11 +31,11 @@ fun CaAlertScreen(
 @Composable
 private fun InternalCaAlertScreen(
     snackbarHostState: SnackbarHostState,
-    onDialogScreen: (@Composable (caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState, onAction: (nextAction: CaAction) -> Unit) -> Unit)? = null,
-    caAlertViewModel: CaAlertViewModel = viewModel(),
+    onDialogScreen: (@Composable (caAlertUiStateDialogUiState: CaAlertUiStateDialogUiState, onAction: (nextAction: Action) -> Unit) -> Unit)? = null,
+    caAlertViewModel: ActionAlertViewModel = viewModel(),
 ) {
     var showDialog by remember { mutableStateOf(false) }
-    val action = LocalCaActionOwner.current
+    val action = LocalActionSenderOwner.current
 
     caAlertViewModel.sideEffect.collectLifecycleEvent { event ->
         when (event) {
@@ -65,7 +65,7 @@ private fun InternalCaAlertScreen(
 
     val caAlertUiStateDialogUiState by caAlertViewModel.alertUiStateDialogUiState.collectAsStateWithLifecycle()
     if (showDialog) {
-        val onAction: (nextAction: CaAction) -> Unit = { nextAction ->
+        val onAction: (nextAction: Action) -> Unit = { nextAction ->
             action.send(CaAlertAction.HideDialog).invoke()
             action.send(nextAction).invoke()
         }
@@ -80,7 +80,7 @@ private fun InternalCaAlertScreen(
         }
     }
 
-    LaunchedLifecycleViewModel(
+    LaunchedLifecycleActionViewModel(
         viewModel = caAlertViewModel,
     )
 }
