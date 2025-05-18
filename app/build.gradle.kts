@@ -32,11 +32,7 @@ dependencies {
 
     implementation(libs.androidx.compose.activity)
 
-    projects.core.filterImplementation {
-        implementation(it)
-    }
-
-    projects.sample.filterImplementation {
+    rootProject.subprojects.filterProject {
         implementation(it)
     }
 }
