@@ -6,6 +6,7 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.staticCompositionLocalOf
 import tech.thdev.composable.architecture.action.system.ActionSender
 import tech.thdev.composable.architecture.action.system.base.ActionViewModel
+import tech.thdev.composable.architecture.action.system.lifecycle.LaunchedLifecycleActionViewModel
 
 /**
  * Define [tech.thdev.composable.architecture.action.system.ActionSender] at the beginning of the Compose hierarchy.
@@ -71,6 +72,7 @@ fun ActionSenderCompositionLocalProvider(
     actionViewModel: ActionViewModel<*>,
     body: @Composable () -> Unit,
 ) {
+    LaunchedLifecycleActionViewModel(viewModel = actionViewModel)
     CompositionLocalProvider(
         LocalActionSenderOwner provides actionViewModel.actionSender,
     ) {
