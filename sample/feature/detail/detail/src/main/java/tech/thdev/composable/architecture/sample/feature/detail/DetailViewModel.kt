@@ -20,8 +20,7 @@ internal class DetailViewModel @Inject constructor(
     private val _detailUiState = MutableStateFlow(DetailUiState.Default)
     val detailUiState = _detailUiState.asStateFlow()
 
-    override fun onLoad() {
-        super.onLoad()
+    override fun onCreated() {
         nextAction(DetailAction.Task)
     }
 

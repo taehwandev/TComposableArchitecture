@@ -74,6 +74,9 @@ abstract class ActionViewModel<ACTION : Action>(
     var flowActionJob: Job? = null
 
     @VisibleForTesting
+    var isFirst = false
+
+    @VisibleForTesting
     val flowAction by lazy {
         flowActionStream.flowAction()
             .filterIsInstance(actionClass)
@@ -88,12 +91,16 @@ abstract class ActionViewModel<ACTION : Action>(
         flowActionJob = flowAction
             .launchIn(viewModelScope)
 
-        onLoad()
+        if (isFirst) {
+            onCreated()
+            isFirst = false
+        }
     }
 
-    open fun onLoad() { // custom open
-        // Do nothing
-    }
+    /**
+     * ViewModel created only call once.
+     */
+    open fun onCreated() {}
 
     internal fun cancelAction() {
         if (flowActionJob?.isActive == true) {
