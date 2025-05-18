@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import tech.thdev.composable.architecture.action.system.compose.ActionSenderCompositionLocalProvider
 import tech.thdev.composable.architecture.action.system.compose.LocalActionSenderOwner
-import tech.thdev.composable.architecture.action.system.hilt.actionViewModelActivate
 import tech.thdev.composable.architecture.action.system.lifecycle.collectLifecycleEvent
 import tech.thdev.composable.architecture.action.system.send
 import tech.thdev.composable.architecture.sample.feature.main.screen.main.MainAction
@@ -25,7 +25,7 @@ import tech.thdev.composable.architecture.sample.resource.R
 
 @Composable
 internal fun InternalMainScaffold(
-    mainViewModel: MainViewModel = actionViewModelActivate(),
+    mainViewModel: MainViewModel = viewModel(),
 ) {
     ActionSenderCompositionLocalProvider(mainViewModel) {
         val activity = LocalActivity.current

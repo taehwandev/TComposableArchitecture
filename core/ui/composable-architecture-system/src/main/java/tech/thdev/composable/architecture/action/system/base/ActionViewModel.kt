@@ -1,7 +1,6 @@
 package tech.thdev.composable.architecture.action.system.base
 
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
@@ -45,13 +44,10 @@ import kotlin.reflect.KClass
  * - Required: Call `viewModel.loadAction()`
  * - Optional: Collect `viewModel.sideEffect` using `viewModel.sideEffect.collectAsEvent { ... }`
  *
- * [tech.thdev.composable.architecture.action.system.hilt.actionViewModelActivate] is a pre-defined function that collects side effects with a default lifecycle state of [Lifecycle.State.RESUMED].
- * or your navigation [tech.thdev.composable.architecture.action.system.hilt.actionHiltViewModelActivate]] is a pre-defined function that collects side effects with a default lifecycle state of [Lifecycle.State.RESUMED].
- *
  * ```kotlin
  * @Composable
  * fun SomeScreen(
- *      someViewModel: SomeViewModel = actionViewModelActivate(), // or, Use navigation actionHiltViewModelActivate()
+ *      someViewModel: SomeViewModel = viewModel(), // or, Use navigation hiltViewModel()
  * ) {
  *     ActionSenderCompositionLocalProvider(someViewModel) {
  *          val uiState by someViewModel.uiState.collectAsStateWithLifecycle()
