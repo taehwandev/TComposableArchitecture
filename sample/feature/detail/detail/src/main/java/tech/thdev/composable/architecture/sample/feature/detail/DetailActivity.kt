@@ -19,11 +19,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import tech.thdev.composable.architecture.action.system.compose.ActionSenderCompositionLocalProvider
 import tech.thdev.composable.architecture.action.system.compose.LocalActionSenderOwner
-import tech.thdev.composable.architecture.action.system.lifecycle.LaunchedLifecycleActionViewModel
 import tech.thdev.composable.architecture.action.system.send
 import tech.thdev.composable.architecture.alert.system.CaAlertScreen
-import tech.thdev.composable.architecture.router.system.LaunchedCaRouter
+import tech.thdev.composable.architecture.router.system.LaunchedRouter
 import tech.thdev.composable.architecture.sample.feature.detail.compose.DetailScreen
 import tech.thdev.composable.architecture.sample.resource.theme.TComposableArchitectureTheme
 
@@ -41,42 +41,40 @@ class DetailActivity : ComponentActivity() {
                 CaAlertScreen(
                     snackbarHostState = snackbarHostState,
                 )
-                LaunchedCaRouter()
-                LaunchedLifecycleActionViewModel(
-                    viewModel = detailViewModel,
-                )
+                LaunchedRouter()
 
-                val action = LocalActionSenderOwner.current
-
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            navigationIcon = {
-                                IconButton(
-                                    onClick = action.send(DetailAction.MoveBack),
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = "back",
-                                    )
+                ActionSenderCompositionLocalProvider(detailViewModel) {
+                    val action = LocalActionSenderOwner.current
+                    Scaffold(
+                        topBar = {
+                            TopAppBar(
+                                navigationIcon = {
+                                    IconButton(
+                                        onClick = action.send(DetailAction.MoveBack),
+                                    ) {
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                            contentDescription = "back",
+                                        )
+                                    }
+                                },
+                                title = {
+                                    Text("Detail view")
                                 }
-                            },
-                            title = {
-                                Text("Detail view")
-                            }
-                        )
-                    },
-                    snackbarHost = {
-                        SnackbarHost(hostState = snackbarHostState)
-                    },
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) { innerPadding ->
-                    DetailScreen(
+                            )
+                        },
+                        snackbarHost = {
+                            SnackbarHost(hostState = snackbarHostState)
+                        },
                         modifier = Modifier
-                            .padding(innerPadding)
-                            .padding(horizontal = 10.dp)
-                    )
+                            .fillMaxSize()
+                    ) { innerPadding ->
+                        DetailScreen(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .padding(horizontal = 10.dp)
+                        )
+                    }
                 }
             }
         }

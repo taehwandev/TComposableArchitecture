@@ -1,6 +1,6 @@
 package tech.thdev.composable.architecture.sample.feature.detail.api
 
-import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
+import tech.thdev.composable.architecture.router.system.route.ActivityRoute
 
 interface DetailActivityRouter : ActivityRoute {
 

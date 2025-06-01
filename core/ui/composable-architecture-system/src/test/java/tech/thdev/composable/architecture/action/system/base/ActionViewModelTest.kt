@@ -15,6 +15,7 @@ internal class ActionViewModelTest {
     fun `test initData`() {
         Assert.assertFalse(viewModel.taskClick)
         Assert.assertFalse(viewModel.clickEvent)
+        Assert.assertTrue(viewModel.isFirst)
         Assert.assertNull(viewModel.flowActionJob)
     }
 

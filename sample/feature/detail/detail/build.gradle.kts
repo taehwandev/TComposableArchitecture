@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.tech.thdev.android.library.feature)
+    alias(libs.plugins.tech.thdev.android.library.feature.compose)
 }
 
 setNamespace("sample.feature.detail")

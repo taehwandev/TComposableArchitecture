@@ -69,13 +69,13 @@ gradlePlugin {
             id = "tech.thdev.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-        register("androidLibraryFeatureApi") {
-            id = "tech.thdev.android.library.feature.api"
-            implementationClass = "AndroidLibraryFeatureApiConventionPlugin"
+        register("androidLibraryFeatureComposeApi") {
+            id = "tech.thdev.android.library.feature.compose.api"
+            implementationClass = "AndroidLibraryFeatureComposeApiConventionPlugin"
         }
-        register("androidLibraryFeature") {
-            id = "tech.thdev.android.library.feature"
-            implementationClass = "AndroidLibraryFeatureConventionPlugin"
+        register("androidLibraryFeatureCompose") {
+            id = "tech.thdev.android.library.feature.compose"
+            implementationClass = "AndroidLibraryFeatureComposeConventionPlugin"
         }
         register("androidLibraryCompose") {
             id = "tech.thdev.android.library.compose"

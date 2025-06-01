@@ -7,11 +7,11 @@ import tech.thdev.composable.architecture.router.system.fake.FakeActivityRoute
 internal class InternalActivityRouteMapperTest {
 
     private val fakeActivityRoute = FakeActivityRoute()
-    private val journeyMapper = InternalActivityRouteMapper(mapper = mapOf(FakeActivityRoute::class to fakeActivityRoute))
+    private val journeyMapper = InternalActivityRouteMapper(mapper = mapOf(FakeActivityRoute::class.java to fakeActivityRoute))
 
     @Test
     fun `test initData`() {
-        Assert.assertEquals(mapOf(FakeActivityRoute::class to fakeActivityRoute), journeyMapper.mapper)
+        Assert.assertEquals(mapOf(FakeActivityRoute::class.java to fakeActivityRoute), journeyMapper.mapper)
     }
 
     @Test

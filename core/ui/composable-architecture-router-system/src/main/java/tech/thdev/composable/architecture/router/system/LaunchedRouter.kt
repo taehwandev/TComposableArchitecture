@@ -3,10 +3,10 @@ package tech.thdev.composable.architecture.router.system
 import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.flow.collectLatest
@@ -25,7 +25,7 @@ fun LaunchedRouter(
 @Composable
 private fun InternalLaunchedRouter(
     navHostController: NavHostController? = null,
-    internalRouterViewModel: InternalRouteViewModel = hiltViewModel(),
+    internalRouterViewModel: InternalRouteViewModel = viewModel(),
 ) {
     val activity = LocalActivity.current
     val lifecycleOwner = LocalLifecycleOwner.current
