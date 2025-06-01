@@ -70,7 +70,7 @@ abstract class ActionViewModel<ACTION : Action>(
     var flowActionJob: Job? = null
 
     @VisibleForTesting
-    var isFirst = false
+    var isFirst = true
 
     @VisibleForTesting
     val flowAction by lazy {

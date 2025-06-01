@@ -13,6 +13,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import tech.thdev.composable.architecture.action.system.FlowActionStream
+import tech.thdev.composable.architecture.router.system.Navigator
 import tech.thdev.composable.architecture.sample.feature.detail.api.DetailActivityRouter
 import tech.thdev.composable.architecture.sample.feature.detail.api.model.DetailData
 import tech.thdev.composable.architecture.sample.feature.detail.model.DetailUiState
@@ -21,10 +22,12 @@ class DetailViewModelTest {
 
     private val flowActionStream = mock<FlowActionStream>()
     private val savedStateHandle = mock<SavedStateHandle>()
+    private val navigator = mock<Navigator>()
 
     private val viewModel = DetailViewModel(
         flowActionStream = flowActionStream,
         savedStateHandle = savedStateHandle,
+        navigator = navigator,
     )
 
     private val action = MutableSharedFlow<DetailAction>(
@@ -68,6 +71,7 @@ class DetailViewModelTest {
 
         viewModel.flowAction.test {
             Assert.assertEquals(mockItem, awaitItem())
+            verify(navigator).navigateBack()
 
             cancelAndIgnoreRemainingEvents()
         }

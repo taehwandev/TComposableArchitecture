@@ -16,7 +16,7 @@ import tech.thdev.composable.architecture.router.system.internal.visitor.Interna
 internal class InternalRouteViewModelTest {
 
     private val fakeActivityRoute = FakeActivityRoute()
-    private val journeyMapper = InternalActivityRouteMapper(mapper = mapOf(FakeActivityRoute::class to fakeActivityRoute))
+    private val journeyMapper = InternalActivityRouteMapper(mapper = mapOf(FakeActivityRoute::class.java to fakeActivityRoute))
 
     private val navigator = mock<InternalNavigator>()
 
@@ -48,7 +48,6 @@ internal class InternalRouteViewModelTest {
                     )
                 )
                 Assert.assertEquals(InternalRouteSideEffect.NavigateActivity(activityRoute = fakeActivityRoute, argumentMap = emptyMap()), awaitItem())
-
 
                 // Back test
                 mockChannel.send(InternalRoute.NavigateBack)

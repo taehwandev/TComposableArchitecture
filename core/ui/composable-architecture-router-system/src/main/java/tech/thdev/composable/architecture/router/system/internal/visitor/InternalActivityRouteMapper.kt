@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
  */
 @Singleton
 internal class InternalActivityRouteMapper @Inject constructor(
-    @get:VisibleForTesting val mapper: Map<KClass<out ActivityRoute>, ActivityRoute>,
+    @get:VisibleForTesting val mapper: Map<Class<out ActivityRoute>, ActivityRoute>,
 ) {
 
     /**
@@ -19,6 +19,6 @@ internal class InternalActivityRouteMapper @Inject constructor(
      */
     internal fun getJourneyOrNull(journeyKClass: KClass<*>): ActivityRoute? =
         synchronized(mapper) {
-            mapper[journeyKClass]
+            mapper[journeyKClass.java]
         }
 }

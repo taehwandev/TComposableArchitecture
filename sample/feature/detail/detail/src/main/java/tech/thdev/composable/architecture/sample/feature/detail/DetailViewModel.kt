@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import tech.thdev.composable.architecture.action.system.FlowActionStream
 import tech.thdev.composable.architecture.action.system.base.ActionViewModel
+import tech.thdev.composable.architecture.router.system.Navigator
 import tech.thdev.composable.architecture.sample.feature.detail.api.DetailActivityRouter
 import tech.thdev.composable.architecture.sample.feature.detail.api.model.DetailData
 import tech.thdev.composable.architecture.sample.feature.detail.model.DetailUiState
@@ -15,6 +16,7 @@ import javax.inject.Inject
 internal class DetailViewModel @Inject constructor(
     flowActionStream: FlowActionStream,
     private val savedStateHandle: SavedStateHandle,
+    private val navigator: Navigator,
 ) : ActionViewModel<DetailAction>(flowActionStream, DetailAction::class) {
 
     private val _detailUiState = MutableStateFlow(DetailUiState.Default)
@@ -33,7 +35,7 @@ internal class DetailViewModel @Inject constructor(
             }
 
             is DetailAction.MoveBack -> {
-//                nextAction(CaRouterAction.MoveActivityBack)
+                navigator.navigateBack()
             }
         }
     }

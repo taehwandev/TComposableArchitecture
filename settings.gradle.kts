@@ -30,9 +30,9 @@ include(":app")
 
 // core
 include(
+    ":core:ui:composable-architecture-router-system",
     ":core:ui:composable-architecture-system",
     ":core:ui:composable-architecture-alert-system",
-    ":core:ui:composable-architecture-router-system",
 )
 
 include(
@@ -47,5 +47,9 @@ include(
 )
 
 include(
-    ":sample:feature:main:screen:screen-main",
+    ":sample:feature:main:screen:screen-navigation",
+    ":sample:feature:main:screen:screen-search",
+    ":sample:feature:main:screen:screen-search-api",
+    ":sample:feature:main:screen:screen-settings",
+    ":sample:feature:main:screen:screen-settings-api",
 )
