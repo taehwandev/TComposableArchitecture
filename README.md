@@ -2,14 +2,16 @@
 
 T-ComposableArchitecture is a sample project that explores a structure similar to Reducers, UiState, and SideEffects from React.
 
-This architecture is inspired by the [swift-composable-architecture](https://github.com/pointfreeco/swift-composable-architecture) (TCA).
+This architecture is inspired by the swift-composable-architecture (TCA).
 
-It's intended for educational and sample usage, built using Compose and Hilt.
+It's intended for educational and sample usage, built using Compose and Hilt, Compose navigation.
 
 This code primarily consists of:
 
-- action-system : This manages actions sent from Compose, received and processed by the ViewModel (using a reducer pattern). It also facilitates sending new actions when needed.
-- sample app : The sample app demonstrates how to use the architecture.
+- action-system: This manages actions sent from Compose, received and processed by the ViewModel (using a reducer pattern). It also facilitates sending new actions when needed.
+- router-system: Enables operations using Activity/Navigation through the router system.
+- sample app: The sample app demonstrates how to use the architecture.
+
 
 # Blog
 - [T Composable Architecture for Compose (React-inspired) - en](https://medium.com/@taehwandev/t-composable-architecture-for-compose-react-inspired-6ef28d799100)
@@ -17,7 +19,7 @@ This code primarily consists of:
 
 # Download
 
-Use gradle - compose 1.7.6, compose compiler k2, kotlin 2.0.21
+Use gradle - compose bom 2025.05.01, kotlin 2.1.21
 
 ```
 implementation("tech.thdev:composable-architecture-system:25.2.0")
@@ -25,109 +27,56 @@ implementation("tech.thdev:composable-architecture-system:25.2.0")
 
 Release version are available in [Sonatyp's repository.](https://search.maven.org/search?q=tech.thdev)
 
-# CaViewModel and CaActivity
-
-[Sample code](https://github.com/taehwandev/TComposableArchitecture/blob/main/app/src/main/java/tech/thdev/composable/architecture/app/feature/main/MainActivity.kt)
-
-While usage location within your `@Composables` doesn't matter, two base classes are provided for convenience:
-
-- CaViewModel : This class handles events received from the action-system, implementing a reducer and enabling SideEffect usage for one-time events.
-- CaActivity : This base class simplifies the integration of the action-system. You can implement your `ContentView()` by inheriting from it.
-
-Implement your Actions:
+# ActionViewModel
 
 ```kotlin
-sealed interface Action : CaAction {
+// UiState sample
+@Immutable
+internal data class SettingsUiState(
+    val mode: Mode,
+) {
 
-    data object Task : Action // Use object for simple actions
-    
-    data object LoadData : Action // Use object for simple actions
+    enum class Mode {
+        LIGHT,
+        DARK,
+        AUTO,
+    }
+
+    companion object {
+
+        val Default = SettingsUiState(
+            mode = Mode.AUTO,
+        )
+    }
+}
+
+// Action definition
+internal sealed interface SettingsAction : Action {
+
+    data class ThemeChange(val newType: SettingsUiState.Mode) : SettingsAction
 }
 ```
 
-Implement your SideEffects:
+Inherit and implement ActionViewModel
 
-```kotlin
-sealed interface SideEffect : CaSideEffect {
-
-    data object ShowToast : SideEffect // Use object for simple side effects
-}
 ```
-
-CaViewModel is designed to work with [tech.thdev.composable.architecture.action.system.CaActionSender].
-It uses a structure similar to a reducer, allowing you to utilize it as shown below. It also supports SideEffect handling.
-
-```kotlin
+// ViewModel
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    flowCaActionStream: FlowCaActionStream,
-) : CaViewModel<Action, SideEffect>(flowCaActionStream, Action::class) {
+internal class SettingsViewModel @Inject constructor(
+    flowActionStream: FlowActionStream,
+) : ActionViewModel<SettingsAction>(flowActionStream, SettingsAction::class) {
 
-    private val _uiState = MutableStateFlow(UiState())
-    val state = _uiState.asStateFlow()
+    private val _settingsUiState = MutableStateFlow(SettingsUiState.Default)
+    val settingsUiState = _settingsUiState.asStateFlow()
 
-    override suspend fun reducer(action: Action): CaAction =
+    override suspend fun handleAction(action: SettingsAction) {
         when (action) {
-            is Action.Task -> {
-                _uiState.value = UiState(showPlaceholder = true)
-                Action.LoadData // next event
-            }
-
-            is Action.Send -> {
-                val loadEnd = // load network
-                _uiState.value = UiState(text = loadEnd)
-
-                sendSideEffect(SideEffect.ShowToast)
-
-                CaActionNone // Or return another action
-            }
-            // ... other actions
-        }
-}
-```
-
-After inheriting from CaViewModel, you must handle two values in the base class:
-- Required: Call `viewModel.loadAction()`
-- Optional: Collect `viewModel.sideEffect` using `viewModel.sideEffect.collectAsEvent { ... }`
-
-[tech.thdev.composable.architecture.util.collectAsEvent] is a pre-defined function that collects side effects with a default lifecycle state of [Lifecycle.State.STARTED].
-
-```kotlin
-@AndroidEntryPoint
-class MainActivity : CaActionActivity() {
-
-    private val mainViewModel by viewModels<MainViewModel>()
-
-    @Composable
-    override fun ContentView() {
-        TComposableArchitectureTheme {
-            val action = LocalActionOwner.current
-
-            Column {
-              Button(
-                onClick = action.send(Action.LoadData),
-              ) {
-                Text(
-                  text = "OnClick",
-                )
-              }
-            
-              Text(
-                text = uiState.text,
-              )
-            }
-
-            LaunchedEffect(Unit) {
-                mainViewModel.loadAction() // Required: Load actions
-                mainViewModel.action(Action.Task) // Option task
-            }
-
-            mainViewModel.sideEffect.collectAsEvent { // Optional: Handle side effects
-                when (it) {
-                    SideEffect.ShowToast -> {
-                        Toast.makeText(this@MainActivity, "message", Toast.LENGTH_SHORT).show()
-                    }
-                    // ... other side effects
+            is SettingsAction.ThemeChange -> { // Changed to 'is' for type checking sealed interface
+                // Your action
+                _settingsUiState.update {
+                    it.copy(
+                        mode = action.newType,
+                    )
                 }
             }
         }
@@ -135,44 +84,110 @@ class MainActivity : CaActionActivity() {
 }
 ```
 
-Or composable function
+Test writing example
+
+```kotlin
+internal class ActionViewModelTest {
+
+    private val flowActionStream = mock<FlowActionStream>()
+
+    private val viewModel = SettingsViewModel(flowActionStream)
+
+    @Test
+    fun `test ThemeModeChange`() = runTest {
+        // Corrected action name based on definition: ThemeChange, not ThemeModeChange
+        val mockItem = SettingsAction.ThemeChange(newType = SettingsUiState.Mode.DARK)
+        whenever(flowActionStream.flowAction()).thenReturn(flowOf(mockItem))
+
+        viewModel.flowAction // Assuming viewModel exposes flowAction for testing, or this needs adjustment based on actual API
+            .test {
+                Assert.assertEquals(
+                    // Corrected action name
+                    SettingsAction.ThemeChange(newType = SettingsUiState.Mode.DARK),
+                    awaitItem()
+                )
+
+                Assert.assertEquals(
+                    SettingsUiState(
+                        mode = SettingsUiState.Mode.DARK,
+                    ),
+                    viewModel.settingsUiState.value
+                )
+
+                verify(flowActionStream).flowAction()
+
+                cancelAndIgnoreRemainingEvents()
+            }
+    }
+}
+```
+
+(Self-correction in the test code: SettingsAction.ThemeModeChange was used in the original test example, but the SettingsAction definition shows ThemeChange. I've corrected it to ThemeChange and action.newType for consistency. Also, the when (action) in handleAction should use is SettingsAction.ThemeChange for smart casting with sealed interfaces.)
+
+# Using with Composable
+
+When using with Compose, if you want to use Actions, you must call `ActionSenderCompositionLocalProvider`.
+
+If you want to use it without Actions, you must call `LaunchedLifecycleActionViewModel(viewModel = actionViewModel)`.
 
 ```kotlin
 @Composable
-fun SomeScreen(
-    mainViewModel: MainViewModel = viewModels(),
+internal fun InternalSettingsScreen(
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
 ) {
-    val uiState by mainViewModel.uiState.collectAsStateWithLifecycle()
+    ActionSenderCompositionLocalProvider(settingsViewModel) {
+        val settingsUiState by settingsViewModel.settingsUiState.collectAsStateWithLifecycle()
 
-    SomeScreen(
-        uiState = uiState,
-    )
-
-    LaunchEffect(Unit) {
-        mainViewModel.loadAction() // Required: Load actions
-        mainViewModel.action(Action.Task) // Option task
+        InternalSettingsScreen(
+            onThemeModeSelectBox = { modifier ->
+                ThemeModeSelectBox(
+                    mode = settingsUiState.mode,
+                    // Assuming ThemeModeSelectBox has an onClick to send an action
+                    onClick = { newMode ->
+                        // Example of sending an action, adjust as per actual ThemeModeSelectBox
+                        settingsViewModel.dispatch(SettingsAction.ThemeChange(newType = newMode))
+                    },
+                    modifier = modifier
+                )
+            },
+        )
     }
 }
 
 @Composable
-fun SomeScreen(
-    uiState: UiState,
+private fun InternalSettingsScreen(
+    onThemeModeSelectBox: @Composable (modifier: Modifier) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val action = LocalActionOwner.current
-
-    Column {
-        Button(
-            onClick = action.send(Action.LoadData),
-        ) {
-            Text(
-                text = "OnClick",
-            )
-        }
-    
-        Text(
-            text = uiState.text,
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
+        onThemeModeSelectBox(
+            Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewInternalSettingsScreen() {
+    var uiState by remember { mutableStateOf(SettingsUiState.Default) }
+    InternalSettingsScreen(
+        onThemeModeSelectBox = { modifier ->
+            ThemeModeSelectBox(
+                mode = uiState.mode,
+                onClick = { mode ->
+                    uiState = SettingsUiState(mode = mode)
+                },
+                modifier = modifier
+            )
+        },
+        modifier = Modifier
+            .fillMaxSize()
+    )
 }
 ```
 
