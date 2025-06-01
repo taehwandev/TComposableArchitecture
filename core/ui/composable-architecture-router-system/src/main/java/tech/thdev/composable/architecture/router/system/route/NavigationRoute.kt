@@ -1,4 +1,4 @@
-package tech.thdev.composable.architecture.router.system.navigation
+package tech.thdev.composable.architecture.router.system.route
 
 /**
  * CaNavigation is defined as follows.
@@ -8,4 +8,4 @@ package tech.thdev.composable.architecture.router.system.navigation
  * data object MainRoute : CaNavigationRoute
  * ```
  */
-interface CaNavigationRoute
+interface NavigationRoute
