@@ -1,11 +1,11 @@
 package tech.thdev.composable.architecture.router.system.di
 
 import dagger.MapKey
-import tech.thdev.composable.architecture.router.system.navigation.ActivityRoute
+import tech.thdev.composable.architecture.router.system.route.ActivityRoute
 import kotlin.reflect.KClass
 
 /**
- * Use with Dagger or Hilt's IntoMap and CaRouterKey.
+ * Use with Dagger or Hilt's IntoMap and RouterKey.
  *
  * Write the following code in your Dagger or Hilt module.
  *
@@ -33,7 +33,7 @@ import kotlin.reflect.KClass
  *
  *  @Binds
  *  @IntoMap
- *  @RouterKey(MainActivityRoute::class)
+ *  @RouteKey(MainActivityRoute::class)
  *  abstract fun bindMainActivityRoute(
  *      mainActivityRoute: MainActivityRouteImpl,
  *  ): ActivityRoute
@@ -41,6 +41,6 @@ import kotlin.reflect.KClass
  * ```
  */
 @MapKey
-annotation class CaRouterKey(
+annotation class RouteKey(
     val value: KClass<out ActivityRoute>,
 )

@@ -1,4 +1,4 @@
-package tech.thdev.composable.architecture.router.system.navigation
+package tech.thdev.composable.architecture.router.system.route
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,7 @@ import android.content.Intent
  *
  * Define the interface for MainActivity.
  * ```kotlin
- * interface MainActivityRoute : CaActivityRoute
+ * interface MainActivityRoute : ActivityRoute
  * ```
  *
  * When using Activity, initialize the Intent in the implementation as follows.
@@ -35,7 +35,7 @@ import android.content.Intent
  *  @RouterKey(MainActivityRoute::class)
  *  abstract fun bindMainActivityRoute(
  *      mainActivityRoute: MainActivityRouteImpl,
- *  ): CaActivityRoute
+ *  ): ActivityRoute
  * }
  * ```
  */
